@@ -4,10 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class RacerDbHelper extends SQLiteOpenHelper {
-
-    private static final String DATABASE_NAME = BuildC
-    private static final int DATABASE_VERSION = 1;
+//public class RacerDbHelper extends SQLiteOpenHelper {
+//    private static final String DATABASE_NAME = BuildC
+//    private static final int DATABASE_VERSION = 1;
 //
 //    public RacerDbHelper(Context context) {
 //        super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -27,4 +26,4 @@ public class RacerDbHelper extends SQLiteOpenHelper {
 //        db.execSQL("DROP TABLE IF EXISTS snails");
 //        onCreate(db);
 //    }
-}
+//}
