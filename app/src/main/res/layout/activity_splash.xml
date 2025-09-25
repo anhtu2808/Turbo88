@@ -12,22 +12,28 @@
 
     <ImageView
         android:id="@+id/imgLogo"
-        android:layout_width="260dp"
-        android:layout_height="360dp"
+        android:layout_width="320dp"
+        android:layout_height="420dp"
         android:layout_centerInParent="true"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/turbo_logo" />
+        android:src="@drawable/turbo_logo"
+        android:scaleType="centerInside" />
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_below="@id/imgLogo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/app_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textSize="34sp"
         android:textStyle="bold"
-        android:textColor="#FFDA6A" />
+        android:textColor="#FFFFFF"
+        android:fontFamily="sans-serif-medium"
+        android:shadowColor="#80000000"
+        android:shadowDx="0"
+        android:shadowDy="2"
+        android:shadowRadius="4" />
 
 </RelativeLayout>

@@ -45,9 +45,16 @@
                     android:text="@string/welcome_racer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
+                    android:textSize="32sp"
                     android:textStyle="bold"
-                    android:textColor="#FFDA6A"
+                    android:fontFamily="sans-serif-condensed"
+                    android:letterSpacing="0.01"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    android:shadowColor="#66000000"
+                    android:shadowDx="0"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
                     android:layout_marginBottom="16dp" />
 
                 <androidx.appcompat.widget.AppCompatButton
