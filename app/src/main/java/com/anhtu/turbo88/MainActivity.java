@@ -1,6 +1,8 @@
 package com.anhtu.turbo88;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
@@ -42,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.btnPause).setOnClickListener(v -> isRunning = false);
-
         findViewById(R.id.btnReset).setOnClickListener(v -> {
             isRunning = false;
             progress1 = progress2 = progress3 = progress4 = 0;
@@ -51,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
             snail2.setProgress(progress2);
             snail3.setProgress(progress3);
             snail4.setProgress(progress4);
+
+            snail1.getProgressDrawable().setColorFilter(null);
+            snail2.getProgressDrawable().setColorFilter(null);
+            snail3.getProgressDrawable().setColorFilter(null);
+            snail4.getProgressDrawable().setColorFilter(null);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }
+
     private void startRace() {
         handler.postDelayed(new Runnable() {
             @Override
@@ -112,21 +118,30 @@ public class MainActivity extends AppCompatActivity {
         if (progress1 >= max || progress2 >= max || progress3 >= max || progress4 >= max) {
             isRunning = false;
 
-            int maxProgress = Math.max(Math.max(progress1, progress2), Math.max(progress3, progress4));
+            String winner = getWinner();
 
-            List<String> candidates = new ArrayList<>();
-            if (progress1 == maxProgress) candidates.add("Snail 1");
-            if (progress2 == maxProgress) candidates.add("Snail 2");
-            if (progress3 == maxProgress) candidates.add("Snail 3");
-            if (progress4 == maxProgress) candidates.add("Snail 4");
-
-            Random random = new Random();
-            String winner = candidates.get(random.nextInt(candidates.size()));
+            if (winner.equals("Snail 1")) snail1.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+            if (winner.equals("Snail 2")) snail2.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+            if (winner.equals("Snail 3")) snail3.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+            if (winner.equals("Snail 4")) snail4.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
 
             runOnUiThread(() ->
                     showWinnerDialog(winner)
             );
         }
+    }
+
+    private String getWinner() {
+        int maxProgress = Math.max(Math.max(progress1, progress2), Math.max(progress3, progress4));
+
+        List<String> candidates = new ArrayList<>();
+        if (progress1 == maxProgress) candidates.add("Snail 1");
+        if (progress2 == maxProgress) candidates.add("Snail 2");
+        if (progress3 == maxProgress) candidates.add("Snail 3");
+        if (progress4 == maxProgress) candidates.add("Snail 4");
+
+        Random random = new Random();
+        return candidates.get(random.nextInt(candidates.size()));
     }
 
     private void showWinnerDialog(String winner) {

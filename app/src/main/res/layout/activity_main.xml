@@ -64,13 +64,6 @@
             android:layout_height="wrap_content"/>
 
         <Button
-            android:id="@+id/btnPause"
-            android:text="Pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"/>
-
-        <Button
             android:id="@+id/btnReset"
             android:text="Reset"
             android:layout_width="wrap_content"
