@@ -14,6 +14,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "DATABASE_NAME", "\"turbo88_db.db\""
+        buildConfigField "int", "DATABASE_VERSION", "1"
     }
 
     buildTypes {
