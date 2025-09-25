@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/race3"
+    android:background="@drawable/race5"
     android:padding="10dp"
     android:id="@+id/main">
 
@@ -15,7 +15,7 @@
         android:max="100"
         android:progress="0"
         android:progressDrawable="@android:drawable/progress_horizontal"
-        android:thumb="@drawable/snailreal"
+        android:thumb="@drawable/snail_animation"
         android:layout_marginBottom="12dp"/>
 
     <!-- Lane 2 -->
@@ -26,7 +26,7 @@
         android:max="100"
         android:progress="0"
         android:progressDrawable="@android:drawable/progress_horizontal"
-        android:thumb="@drawable/snailreal"
+        android:thumb="@drawable/snail_animation"
         android:layout_marginBottom="12dp"/>
 
     <!-- Lane 3 -->
@@ -37,7 +37,7 @@
         android:max="100"
         android:progress="0"
         android:progressDrawable="@android:drawable/progress_horizontal"
-        android:thumb="@drawable/snailreal"
+        android:thumb="@drawable/snail_animation"
         android:layout_marginBottom="12dp"/>
 
     <!-- Lane 4 -->
@@ -48,7 +48,7 @@
         android:max="100"
         android:progress="0"
         android:progressDrawable="@android:drawable/progress_horizontal"
-        android:thumb="@drawable/snailreal" />
+        android:thumb="@drawable/snail_animation" />
 
     <!-- Nút điều khiển -->
     <LinearLayout

@@ -1,5 +1,7 @@
 package com.anhtu.turbo88;
 
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
@@ -30,6 +32,16 @@ public class MainActivity extends AppCompatActivity {
         snail2 = findViewById(R.id.snail2);
         snail3 = findViewById(R.id.snail3);
         snail4 = findViewById(R.id.snail4);
+
+        snail1.setThumb(getResources().getDrawable(R.drawable.snail_animation));
+        snail2.setThumb(getResources().getDrawable(R.drawable.snail_animation));
+        snail3.setThumb(getResources().getDrawable(R.drawable.snail_animation));
+        snail4.setThumb(getResources().getDrawable(R.drawable.snail_animation));
+
+        startSnailAnimation(snail1);
+        startSnailAnimation(snail2);
+        startSnailAnimation(snail3);
+        startSnailAnimation(snail4);
 
         btnStart = findViewById(R.id.btnStart);
         btnPause = findViewById(R.id.btnPause);
@@ -74,10 +86,18 @@ public class MainActivity extends AppCompatActivity {
                     snail3.setProgress(progress3);
                     snail4.setProgress(progress4);
 
-                    handler.postDelayed(this, 100); // 100ms update một lần
+                    handler.postDelayed(this, 100);
                 }
             }
         }, 100);
+    }
+    private void startSnailAnimation(SeekBar seekBar) {
+        Drawable drawable = seekBar.getThumb();
+        if (drawable instanceof AnimationDrawable) {
+            AnimationDrawable ani = (AnimationDrawable) drawable;
+            ani.setOneShot(false);
+            ani.start();
+        }
     }
 
 }
