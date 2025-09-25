@@ -19,7 +19,7 @@ import com.anhtu.turbo88.data.entity.User;
 import com.anhtu.turbo88.util.SessionManager;
 
 public class MenuActivity extends AppCompatActivity {
-    private TextView tvWelcome, tvBalance;
+    private TextView tvWelcome;
     private Button btnPlay, btnSettings, btnLogout, btnExit;
 
     private SessionManager session;
@@ -31,7 +31,6 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         tvWelcome = findViewById(R.id.tvWelcome);
-        tvBalance = findViewById(R.id.tvBalance);
         btnPlay = findViewById(R.id.btnPlay);
         btnSettings = findViewById(R.id.btnSettings);
         btnLogout = findViewById(R.id.btnLogout);
@@ -50,17 +49,6 @@ public class MenuActivity extends AppCompatActivity {
 
         tvWelcome.setText("Welcome, " + username);
 
-        // load balance từ DB
-        new Thread(() -> {
-            User u = userDao.findByUsername(username);
-            runOnUiThread(() -> {
-                if (u != null) {
-                    tvBalance.setText(String.format("Balance: %.2f", u.balance));
-                } else {
-                    tvBalance.setText("Balance: -");
-                }
-            });
-        }).start();
 
         btnPlay.setOnClickListener(v -> {
             Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
