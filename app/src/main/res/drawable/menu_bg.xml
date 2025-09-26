@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- base image (use the provided background_1.jpg) -->
+    <item>
+        <bitmap
+            android:src="@drawable/background_1"
+            android:gravity="center"
+            android:antialias="true" />
+    </item>
+
+    <!-- subtle dark overlay to increase contrast for text/buttons -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#55000000" />
+        </shape>
+    </item>
+</layer-list>
