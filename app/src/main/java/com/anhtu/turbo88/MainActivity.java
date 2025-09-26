@@ -1,5 +1,7 @@
 package com.anhtu.turbo88;
 
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
