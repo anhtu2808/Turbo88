@@ -51,8 +51,7 @@ public class MenuActivity extends AppCompatActivity {
 
 
         btnPlay.setOnClickListener(v -> {
-            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
-            // khi có SetupActivity: startActivity(new Intent(this, SetupActivity.class));
+            startActivity(new Intent(this, BettingActivity.class));
         });
 
         btnSettings.setOnClickListener(v -> {
