@@ -8,47 +8,101 @@
     android:id="@+id/main">
 
     <!-- Lane 1 -->
-    <SeekBar
-        android:id="@+id/snail1"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:max="300"
-        android:progress="0"
-        android:progressDrawable="@android:drawable/progress_horizontal"
-        android:thumb="@drawable/snail_animation"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="12dp">
+
+        <SeekBar
+            android:id="@+id/snail1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="300"
+            android:progress="0"
+            android:progressDrawable="@android:drawable/progress_horizontal"
+            android:thumb="@drawable/snail_animation"/>
+
+        <ImageView
+            android:id="@+id/flame1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start|center_vertical"
+            android:src="@drawable/flame_animation"
+            android:visibility="gone"/>
+    </FrameLayout>
+
 
     <!-- Lane 2 -->
-    <SeekBar
-        android:id="@+id/snail2"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:max="300"
-        android:progress="0"
-        android:progressDrawable="@android:drawable/progress_horizontal"
-        android:thumb="@drawable/snail_animation"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="12dp">
+
+        <SeekBar
+            android:id="@+id/snail2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="300"
+            android:progress="0"
+            android:progressDrawable="@android:drawable/progress_horizontal"
+            android:thumb="@drawable/snail_animation"/>
+
+        <ImageView
+            android:id="@+id/flame2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start|center_vertical"
+            android:src="@drawable/flame_animation"
+            android:visibility="gone"/>
+    </FrameLayout>
 
     <!-- Lane 3 -->
-    <SeekBar
-        android:id="@+id/snail3"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:max="300"
-        android:progress="0"
-        android:progressDrawable="@android:drawable/progress_horizontal"
-        android:thumb="@drawable/snail_animation"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="12dp">
+
+        <SeekBar
+            android:id="@+id/snail3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="300"
+            android:progress="0"
+            android:progressDrawable="@android:drawable/progress_horizontal"
+            android:thumb="@drawable/snail_animation"/>
+
+        <ImageView
+            android:id="@+id/flame3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start|center_vertical"
+            android:src="@drawable/flame_animation"
+            android:visibility="gone"/>
+    </FrameLayout>
 
     <!-- Lane 4 -->
-    <SeekBar
-        android:id="@+id/snail4"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:max="300"
-        android:progress="0"
-        android:progressDrawable="@android:drawable/progress_horizontal"
-        android:thumb="@drawable/snail_animation" />
+        android:layout_marginBottom="12dp">
+
+        <SeekBar
+            android:id="@+id/snail4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="300"
+            android:progress="0"
+            android:progressDrawable="@android:drawable/progress_horizontal"
+            android:thumb="@drawable/snail_animation"/>
+
+        <ImageView
+            android:id="@+id/flame4"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start|center_vertical"
+            android:src="@drawable/flame_animation"
+            android:visibility="gone"/>
+    </FrameLayout>
 
     <!-- Nút điều khiển -->
     <LinearLayout
