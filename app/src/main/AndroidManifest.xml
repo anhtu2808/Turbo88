@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Turbo88">
+
         <activity
             android:name=".ui.ResultActivity"
             android:theme="@style/Theme.ResultDialog"
@@ -18,30 +19,49 @@
         <activity
             android:name=".ui.BettingActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.TopupActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.MenuActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.RegisterActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.LoginActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <!-- ✅ Thêm mới -->
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.PrivacyPolicyActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.TermsOfServiceActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
