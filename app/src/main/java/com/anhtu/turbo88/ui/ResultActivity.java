@@ -55,13 +55,14 @@ public class ResultActivity extends AppCompatActivity {
         tvBalance.setText("New Balance: " + newBalance + "$");
 
         // Cập nhật DB
-        String username = session.getUsername();
+        String username = new SessionManager(this).getUsername();
         if (username != null) {
             new Thread(() -> {
-                currentUser = userDao.findByUsername(username);
-                if (currentUser != null) {
-                    currentUser.balance = newBalance;
-                    userDao.updateUser(currentUser);
+                UserDao userDao = AppDatabase.getInstance(this).userDao();
+                User user = userDao.findByUsername(username);
+                if (user != null) {
+                    user.balance = newBalance;
+                    userDao.updateUser(user);
                 }
             }).start();
         }

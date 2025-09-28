@@ -70,6 +70,12 @@ public class BettingActivity extends AppCompatActivity {
         setupListeners();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadAndSetUserBalance();
+    }
+
     private void initViews() {
         tvBalance = findViewById(R.id.tvBalance);
         tvTotalBet = findViewById(R.id.tvTotalBet);
