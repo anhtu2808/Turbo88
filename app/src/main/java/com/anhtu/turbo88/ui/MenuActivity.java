@@ -4,19 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.anhtu.turbo88.R;
 import com.anhtu.turbo88.data.AppDatabase;
 import com.anhtu.turbo88.data.dao.UserDao;
-import com.anhtu.turbo88.data.entity.User;
 import com.anhtu.turbo88.util.SessionManager;
+import com.anhtu.turbo88.util.SoundManager;
 
 public class MenuActivity extends AppCompatActivity {
     private TextView tvWelcome;
@@ -24,6 +19,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private SessionManager session;
     private UserDao userDao;
+    private SoundManager soundManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +34,7 @@ public class MenuActivity extends AppCompatActivity {
 
         session = new SessionManager(this);
         userDao = AppDatabase.getInstance(this).userDao();
+        soundManager = SoundManager.getInstance(this);
 
         String username = session.getUsername();
         if (username == null) {
@@ -49,24 +46,44 @@ public class MenuActivity extends AppCompatActivity {
 
         tvWelcome.setText("Welcome, " + username);
 
+        // Bắt đầu nhạc nền menu
+        soundManager.playBgm();
 
         btnPlay.setOnClickListener(v -> {
             startActivity(new Intent(this, BettingActivity.class));
         });
 
         btnSettings.setOnClickListener(v -> {
-            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
-            // khi có SettingsActivity: startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(MenuActivity.this, SettingsActivity.class));
         });
 
         btnLogout.setOnClickListener(v -> {
+            soundManager.stopBgm(); // dừng nhạc khi logout
             session.logout();
             startActivity(new Intent(MenuActivity.this, LoginActivity.class));
             finish();
         });
 
         btnExit.setOnClickListener(v -> {
+            soundManager.release(); // giải phóng nhạc khi thoát
             finishAffinity();
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Luôn update tên từ session khi quay lại menu
+        String username = session.getUsername();
+        if (username != null) {
+            tvWelcome.setText("Welcome, " + username);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Nếu bạn muốn nhạc chỉ chạy ở menu thôi thì có thể stop ở đây
+        // soundManager.stopBgm();
     }
 }

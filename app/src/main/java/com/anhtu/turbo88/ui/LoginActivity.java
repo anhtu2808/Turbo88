@@ -17,6 +17,7 @@ import com.anhtu.turbo88.data.AppDatabase;
 import com.anhtu.turbo88.data.dao.UserDao;
 import com.anhtu.turbo88.data.entity.User;
 import com.anhtu.turbo88.util.SessionManager;
+import com.anhtu.turbo88.util.SoundManager;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText etUsername, etPassword;
@@ -25,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private UserDao userDao;
     private SessionManager session;
 
+    private SoundManager soundManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,10 @@ public class LoginActivity extends AppCompatActivity {
 
         userDao = AppDatabase.getInstance(this).userDao();
         session = new SessionManager(this);
+
+        // Nhạc nền login
+        soundManager = SoundManager.getInstance(this);
+        soundManager.playBgm();
 
         btnLogin.setOnClickListener(v -> {
             final String u = etUsername.getText().toString().trim();
