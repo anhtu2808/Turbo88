@@ -288,7 +288,14 @@ public class MainActivity extends AppCompatActivity {
         flame.setY(flameY);
     }
 
-
+    private void startSnailAnimation(SeekBar seekBar) {
+        Drawable drawable = seekBar.getThumb();
+        if (drawable instanceof AnimationDrawable) {
+            AnimationDrawable ani = (AnimationDrawable) drawable;
+            ani.setOneShot(false);
+            ani.start();
+        }
+    }
 
 
 }
