@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- soft blue gradient as base -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#E6F4FF"
+                android:centerColor="#D8EEFF"
+                android:endColor="#BEE6FF"
+                android:angle="270" />
+        </shape>
+    </item>
+
+    <!-- subtle warm yellow vignette to match the hero image -->
+    <item>
+        <shape android:shape="rectangle">
+            <size android:width="1px" android:height="1px" />
+            <gradient
+                android:startColor="#00FFFFFF"
+                android:centerColor="#33FFEB99"
+                android:endColor="#00FFFFFF"
+                android:angle="270" />
+        </shape>
+    </item>
+</layer-list>
