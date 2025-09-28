@@ -6,9 +6,13 @@ import android.graphics.drawable.Drawable;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -30,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
     int progress1 = 0, progress2 = 0, progress3 = 0, progress4 = 0;
     int max = 300;
 
+    MediaPlayer bgMusic;
+
+    ImageView flame1, flame2, flame3, flame4;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +49,23 @@ public class MainActivity extends AppCompatActivity {
         snail2 = findViewById(R.id.snail2);
         snail3 = findViewById(R.id.snail3);
         snail4 = findViewById(R.id.snail4);
+
+
+        flame1 = findViewById(R.id.flame1);
+        flame2 = findViewById(R.id.flame2);
+        flame3 = findViewById(R.id.flame3);
+        flame4 = findViewById(R.id.flame4);
+
+
+        snail1.setThumb(getResources().getDrawable(R.drawable.snail_animation));
+        snail2.setThumb(getResources().getDrawable(R.drawable.snail_animation1));
+        snail3.setThumb(getResources().getDrawable(R.drawable.snail_animation3));
+        snail4.setThumb(getResources().getDrawable(R.drawable.snail_animation4));
+
+        startSnailAnimation(snail1);
+        startSnailAnimation(snail2);
+        startSnailAnimation(snail3);
+        startSnailAnimation(snail4);
 
         findViewById(R.id.btnStart).setOnClickListener(v -> {
             if (!isRunning) {
@@ -62,6 +88,19 @@ public class MainActivity extends AppCompatActivity {
             snail4.getProgressDrawable().setColorFilter(null);
         });
 
+        bgMusic = MediaPlayer.create(this, R.raw.tokyo);
+        bgMusic.setLooping(true);
+        bgMusic.start();
+
+        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        audioManager.setStreamVolume(
+                AudioManager.STREAM_MUSIC,
+                audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+                0
+        );
+
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -69,19 +108,36 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (bgMusic != null) {
+            bgMusic.release();
+            bgMusic = null;
+        }
+    }
+
+
+
     private void startRace() {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (isRunning) {
                     if (progress1 < max)
-                        progress1 = updateProgress(progress1, max);
+                        progress1 = updateProgress(progress1, max, flame1);
+                    moveFlame(flame1, snail1);
                     if (progress2 < max)
-                        progress2 = updateProgress(progress2, max);
+                        progress2 = updateProgress(progress2, max, flame2);
+                    moveFlame(flame2, snail2);
                     if (progress3 < max)
-                        progress3 = updateProgress(progress3, max);
+                        progress3 = updateProgress(progress3, max, flame3);
+                    moveFlame(flame3, snail3);
                     if (progress4 < max)
-                        progress4 = updateProgress(progress4, max);
+                        progress4 = updateProgress(progress4, max, flame4);
+                    moveFlame(flame4, snail4);
 
                     snail1.setProgress(progress1);
                     snail2.setProgress(progress2);
@@ -90,13 +146,13 @@ public class MainActivity extends AppCompatActivity {
 
                     checkWinner();
                     if (isRunning)
-                        handler.postDelayed(this, 100);
+                        handler.postDelayed(this, 150);
                 }
             }
-        }, 100);
+        }, 150);
     }
 
-    private int updateProgress(int progress, int max) {
+    private int updateProgress(int progress, int max, ImageView flame) {
         Random random = new Random();
         if (progress < max) {
             int remaining = max - progress;
@@ -109,7 +165,17 @@ public class MainActivity extends AppCompatActivity {
             } else if (remaining > 50) {
                 step = random.nextInt(5) + 2;
             } else {
-                step = random.nextInt(2) + 3;
+                step = random.nextInt(2) + 2;
+            }
+
+            int maxStep = (remaining > 250) ? 3 :
+                    (remaining > 150) ? 4 :
+                            (remaining > 50)  ? 6 : 3;
+
+            if (step == maxStep) {
+                showFlame(flame);
+            } else {
+                hideFlame(flame);
             }
 
             progress += step;
@@ -196,6 +262,33 @@ public class MainActivity extends AppCompatActivity {
 
         return ranking;
     }
+
+    private void showFlame(ImageView flame) {
+        flame.setVisibility(View.VISIBLE);
+        Drawable drawable = flame.getDrawable();
+        if (drawable instanceof AnimationDrawable) {
+            AnimationDrawable ani = (AnimationDrawable) drawable;
+            ani.setOneShot(false);
+            ani.start();
+        }
+    }
+
+    private void hideFlame(ImageView flame) {
+        flame.setVisibility(View.GONE);
+    }
+
+    private void moveFlame(ImageView flame, SeekBar snail) {
+        int progress = snail.getProgress();
+        int max = snail.getMax();
+        float ratio = (float) progress / max;
+        int width = snail.getWidth();
+        float flameX = ratio * width - flame.getWidth();
+        float flameY = snail.getY() + (snail.getHeight() - flame.getHeight()) / 2f;
+        flame.setX(flameX);
+        flame.setY(flameY);
+    }
+
+
 
 
 }
