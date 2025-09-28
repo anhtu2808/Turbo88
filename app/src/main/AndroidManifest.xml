@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Turbo88">
         <activity
+            android:name=".ui.ResultActivity"
+            android:theme="@style/Theme.ResultDialog"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity
             android:name=".ui.BettingActivity"
             android:exported="false" />
         <activity

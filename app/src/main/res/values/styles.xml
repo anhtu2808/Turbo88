@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.ResultDialog" parent="Theme.AppCompat.Dialog">
+        <!-- Cửa sổ dialog có kích thước vừa phải -->
+        <item name="android:windowMinWidthMajor">80%</item>
+        <item name="android:windowMinWidthMinor">80%</item>
+
+        <!-- Nền trong suốt mờ -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <!-- Không có title bar -->
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>

@@ -20,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.anhtu.turbo88.MainActivity;
 import com.anhtu.turbo88.R;
 import com.anhtu.turbo88.data.AppDatabase;
 import com.anhtu.turbo88.data.dao.UserDao;
@@ -186,8 +187,10 @@ public class BettingActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Bets placed! Starting race...", Toast.LENGTH_SHORT).show();
 
-//        Intent intent = new Intent(this, RaceActivity.class);
-//        intent.putExtra("BETS_MAP", bets);
-//        startActivity(intent);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("BETS_MAP", bets); // Serializable
+        intent.putExtra("BALANCE", currentBalance);
+        startActivity(intent);
     }
+
 }

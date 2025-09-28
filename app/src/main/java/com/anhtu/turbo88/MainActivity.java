@@ -1,5 +1,6 @@
 package com.anhtu.turbo88;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.app.AlertDialog;
@@ -18,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -116,20 +118,43 @@ public class MainActivity extends AppCompatActivity {
         return progress;
     }
 
+    @SuppressWarnings("unchecked")
     private void checkWinner() {
         if (progress1 >= max || progress2 >= max || progress3 >= max || progress4 >= max) {
             isRunning = false;
 
-            String winner = getWinner();
+            // Nhận dữ liệu cược từ BettingActivity
+            HashMap<Integer, Integer> bets =
+                    (HashMap<Integer, Integer>) getIntent().getSerializableExtra("BETS_MAP");
+            double balance = getIntent().getDoubleExtra("BALANCE", 0);
 
-            if (winner.equals("Snail 1")) snail1.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
-            if (winner.equals("Snail 2")) snail2.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
-            if (winner.equals("Snail 3")) snail3.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
-            if (winner.equals("Snail 4")) snail4.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+            // Tạo ranking
+            ArrayList<String> ranking = getRanking();
 
-            runOnUiThread(() ->
-                    showWinnerDialog(winner)
-            );
+            // Xác định con thắng
+            String winnerLine = ranking.get(0);
+            int winnerId = Integer.parseInt(winnerLine.replaceAll("\\D+", ""));
+
+            // Tính toán tiền
+            double winAmount = 0;
+            if (bets.containsKey(winnerId)) {
+                winAmount = bets.get(winnerId) * 2.0; // Ví dụ thắng gấp đôi
+            }
+
+            double totalBet = 0;
+            for (int bet : bets.values()) {
+                totalBet += bet;
+            }
+
+            double newBalance = balance - totalBet + winAmount;
+            String betResult = winAmount > 0 ? "🎉 You Win! +" + winAmount + "$" : "😢 You Lose! -" + totalBet + "$";
+
+            // Gửi sang ResultActivity
+            Intent intent = new Intent(this, com.anhtu.turbo88.ui.ResultActivity.class);
+            intent.putStringArrayListExtra("RANKING", new ArrayList<>(ranking));
+            intent.putExtra("BET_RESULT", betResult);
+            intent.putExtra("NEW_BALANCE", newBalance);
+            startActivity(intent);
         }
     }
 
@@ -152,6 +177,24 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage(winner + " is the winner!")
                 .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                 .show();
+    }
+    private ArrayList<String> getRanking() {
+        ArrayList<String> ranking = new ArrayList<>();
+        // Gom progress vào list tạm
+        List<int[]> results = new ArrayList<>();
+        results.add(new int[]{progress1, 1});
+        results.add(new int[]{progress2, 2});
+        results.add(new int[]{progress3, 3});
+        results.add(new int[]{progress4, 4});
+
+        // Sắp xếp giảm dần theo progress
+        results.sort((a, b) -> Integer.compare(b[0], a[0]));
+
+        for (int[] res : results) {
+            ranking.add("Snail " + res[1]);
+        }
+
+        return ranking;
     }
 
 
