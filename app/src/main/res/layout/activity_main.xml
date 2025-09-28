@@ -45,7 +45,7 @@
             android:max="300"
             android:progress="0"
             android:progressDrawable="@android:drawable/progress_horizontal"
-            android:thumb="@drawable/snail_animation"/>
+            android:thumb="@drawable/snail_animation1"/>
 
         <ImageView
             android:id="@+id/flame2"
@@ -69,7 +69,7 @@
             android:max="300"
             android:progress="0"
             android:progressDrawable="@android:drawable/progress_horizontal"
-            android:thumb="@drawable/snail_animation"/>
+            android:thumb="@drawable/snail_animation3"/>
 
         <ImageView
             android:id="@+id/flame3"
@@ -93,7 +93,7 @@
             android:max="300"
             android:progress="0"
             android:progressDrawable="@android:drawable/progress_horizontal"
-            android:thumb="@drawable/snail_animation"/>
+            android:thumb="@drawable/snail_animation4"/>
 
         <ImageView
             android:id="@+id/flame4"

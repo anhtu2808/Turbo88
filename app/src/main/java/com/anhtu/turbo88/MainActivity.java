@@ -56,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         snail1.setThumb(getResources().getDrawable(R.drawable.snail_animation));
-        snail2.setThumb(getResources().getDrawable(R.drawable.snail_animation));
-        snail3.setThumb(getResources().getDrawable(R.drawable.snail_animation));
-        snail4.setThumb(getResources().getDrawable(R.drawable.snail_animation));
+        snail2.setThumb(getResources().getDrawable(R.drawable.snail_animation1));
+        snail3.setThumb(getResources().getDrawable(R.drawable.snail_animation3));
+        snail4.setThumb(getResources().getDrawable(R.drawable.snail_animation4));
 
         startSnailAnimation(snail1);
         startSnailAnimation(snail2);
