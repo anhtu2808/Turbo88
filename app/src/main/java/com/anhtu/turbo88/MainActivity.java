@@ -195,20 +195,11 @@ public class MainActivity extends AppCompatActivity {
 
             ArrayList<String> ranking = getRanking();
 
-            // Lấy ID con về nhất và nhì (nếu có)
-            int firstId = -1;
-            int secondId = -1;
-            if (ranking.size() >= 1) {
-                firstId = extractSnailId(ranking.get(0));
-            }
-            if (ranking.size() >= 2) {
-                secondId = extractSnailId(ranking.get(1));
-            }
+            int firstId = extractSnailId(ranking.get(0));
+            int secondId = ranking.size() >= 2 ? extractSnailId(ranking.get(1)) : -1;
 
             double totalWinAmount = 0;
-
-            // Thưởng: nhất x2.0, nhì x1.5
-            if (firstId != -1 && bets.containsKey(firstId)) {
+            if (bets.containsKey(firstId)) {
                 totalWinAmount += bets.get(firstId) * 2.0;
             }
             if (secondId != -1 && bets.containsKey(secondId)) {
@@ -216,25 +207,19 @@ public class MainActivity extends AppCompatActivity {
             }
 
             double totalBet = 0;
-            for (int bet : bets.values()) {
-                totalBet += bet;
-            }
+            for (int bet : bets.values()) totalBet += bet;
 
             double newBalance = balance - totalBet + totalWinAmount;
 
+            totalWinAmount = totalWinAmount - totalBet;
             StringBuilder betResultBuilder = new StringBuilder();
             if (totalWinAmount > 0) {
                 betResultBuilder.append("🎉 Bạn thắng! +").append(totalWinAmount).append("$");
-                if (firstId != -1 && bets.containsKey(firstId)) {
-                    betResultBuilder.append("\n- Trúng con về nhất (Snail ").append(firstId).append(")");
-                }
-                if (secondId != -1 && bets.containsKey(secondId)) {
-                    betResultBuilder.append("\n- Trúng con về nhì (Snail ").append(secondId).append(")");
-                }
-            } else {
-                betResultBuilder.append("😢 Thua cược! -").append(totalBet).append("$");
+            } else if(totalWinAmount < 0){
+                betResultBuilder.append("😢 Thua cược! ").append(totalWinAmount).append("$");
+            } else{
+                betResultBuilder.append("Bạn hoà vốn");
             }
-
             String betResult = betResultBuilder.toString();
 
             Intent intent = new Intent(this, com.anhtu.turbo88.ui.ResultActivity.class);
@@ -242,24 +227,33 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("BET_RESULT", betResult);
             intent.putExtra("NEW_BALANCE", newBalance);
 
-            // Truyền danh sách các con đã cược để highlight
+            // Gửi danh sách ID đã cược
             intent.putIntegerArrayListExtra("BET_SNAILS", new ArrayList<>(bets.keySet()));
+
+            // Gửi riêng mảng ID và giá trị để tái dựng map (an toàn & nhẹ)
+            int size = bets.size();
+            int[] betIds = new int[size];
+            int[] betValues = new int[size];
+            int idx = 0;
+            for (Integer k : bets.keySet()) {
+                betIds[idx] = k;
+                betValues[idx] = bets.get(k);
+                idx++;
+            }
+            intent.putExtra("BET_IDS", betIds);
+            intent.putExtra("BET_VALUES", betValues);
 
             startActivity(intent);
         }
     }
 
-    // Helper mới để lấy số từ chuỗi "Snail X"
     private int extractSnailId(String line) {
         if (line == null) return -1;
         String digits = line.replaceAll("\\D+", "");
         if (digits.isEmpty()) return -1;
-        try {
-            return Integer.parseInt(digits);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
+        try { return Integer.parseInt(digits); } catch (NumberFormatException e) { return -1; }
     }
+
     private ArrayList<String> getRanking() {
         ArrayList<String> ranking = new ArrayList<>();
         // Gom progress vào list tạm
