@@ -1,6 +1,7 @@
 package com.anhtu.turbo88.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ public class ResultActivity extends AppCompatActivity {
     private SessionManager session;
     private UserDao userDao;
 
+    private List<Integer> betSnails; // NEW: danh sách ID ốc đã cược
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,18 +50,19 @@ public class ResultActivity extends AppCompatActivity {
         session = new SessionManager(this);
         userDao = AppDatabase.getInstance(this).userDao();
 
-        // Nhận dữ liệu từ Intent
         List<String> ranking = getIntent().getStringArrayListExtra("RANKING");
         String betResult = getIntent().getStringExtra("BET_RESULT");
         double newBalance = getIntent().getDoubleExtra("NEW_BALANCE", 0);
 
-        // Hiển thị podium TOP 3
-        setupPodium(ranking);
+        // NEW: nhận danh sách các ốc đã cược
+        betSnails = getIntent().getIntegerArrayListExtra("BET_SNAILS");
+
+        setupPodium(ranking, betSnails);
 
         tvBetResult.setText(betResult != null ? betResult : "");
         tvBalance.setText(String.format(Locale.US, "New Balance: %.2f$", newBalance));
 
-        // Cập nhật DB (balance)
+        // Cập nhật DB
         String username = session.getUsername();
         if (username != null) {
             new Thread(() -> {
@@ -79,8 +82,7 @@ public class ResultActivity extends AppCompatActivity {
         });
     }
 
-    private void setupPodium(List<String> ranking) {
-        // Ẩn/hiện theo dữ liệu
+    private void setupPodium(List<String> ranking, List<Integer> betSnails) {
         if (ranking == null || ranking.isEmpty()) {
             imgFirst.setAlpha(0.3f);
             imgSecond.setAlpha(0.3f);
@@ -95,6 +97,7 @@ public class ResultActivity extends AppCompatActivity {
             String first = ranking.get(0);
             tvFirstName.setText(getDisplayName(first));
             imgFirst.setImageResource(getSnailDrawable(first));
+            highlightIfBet(first, betSnails, imgFirst, tvFirstName);
         } else {
             tvFirstName.setText("-");
             imgFirst.setAlpha(0.3f);
@@ -104,6 +107,7 @@ public class ResultActivity extends AppCompatActivity {
             String second = ranking.get(1);
             tvSecondName.setText(getDisplayName(second));
             imgSecond.setImageResource(getSnailDrawable(second));
+            highlightIfBet(second, betSnails, imgSecond, tvSecondName);
         } else {
             tvSecondName.setText("-");
             imgSecond.setAlpha(0.3f);
@@ -113,11 +117,31 @@ public class ResultActivity extends AppCompatActivity {
             String third = ranking.get(2);
             tvThirdName.setText(getDisplayName(third));
             imgThird.setImageResource(getSnailDrawable(third));
+            highlightIfBet(third, betSnails, imgThird, tvThirdName);
         } else {
             tvThirdName.setText("-");
             imgThird.setAlpha(0.3f);
         }
     }
+
+    private void highlightIfBet(String snailName, List<Integer> betSnails, ImageView img, TextView tvName) {
+        if (isBetSnail(snailName, betSnails)) {
+            img.setBackgroundResource(R.drawable.bg_highlight);
+            tvName.setTextColor(Color.parseColor("#FFD700")); // vàng
+        } else {
+            img.setBackground(null);
+            tvName.setTextColor(Color.WHITE); // trả về màu cũ
+        }
+    }
+
+    private boolean isBetSnail(String snailName, List<Integer> betSnails) {
+        if (snailName == null || betSnails == null) return false;
+        String digits = snailName.replaceAll("\\D+", "");
+        if (digits.isEmpty()) return false;
+        int id = Integer.parseInt(digits);
+        return betSnails.contains(id);
+    }
+
     private int getSnailDrawable(String name) {
         if (name == null) return R.drawable.ic_snail_placeholder;
         switch (name.trim().toLowerCase(Locale.US)) {
@@ -128,11 +152,12 @@ public class ResultActivity extends AppCompatActivity {
             case "snail 3":
                 return R.drawable.chuppy;
             case "snail 4":
-                return R.drawable.lady; // TODO: đổi thành R.drawable.snail_burn nếu bạn rename file
+                return R.drawable.lady;
             default:
                 return R.drawable.ic_snail_placeholder;
         }
     }
+
     private String getDisplayName(String raw) {
         if (raw == null) return "-";
         switch (raw) {

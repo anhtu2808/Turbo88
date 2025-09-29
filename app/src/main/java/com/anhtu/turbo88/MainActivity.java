@@ -189,22 +189,18 @@ public class MainActivity extends AppCompatActivity {
         if (progress1 >= max || progress2 >= max || progress3 >= max || progress4 >= max) {
             isRunning = false;
 
-            // Nhận dữ liệu cược từ BettingActivity
             HashMap<Integer, Integer> bets =
                     (HashMap<Integer, Integer>) getIntent().getSerializableExtra("BETS_MAP");
             double balance = getIntent().getDoubleExtra("BALANCE", 0);
 
-            // Tạo ranking
             ArrayList<String> ranking = getRanking();
 
-            // Xác định con thắng
             String winnerLine = ranking.get(0);
             int winnerId = Integer.parseInt(winnerLine.replaceAll("\\D+", ""));
 
-            // Tính toán tiền
             double winAmount = 0;
             if (bets.containsKey(winnerId)) {
-                winAmount = bets.get(winnerId) * 2.0; // Ví dụ thắng gấp đôi
+                winAmount = bets.get(winnerId) * 2.0;
             }
 
             double totalBet = 0;
@@ -215,11 +211,14 @@ public class MainActivity extends AppCompatActivity {
             double newBalance = balance - totalBet + winAmount;
             String betResult = winAmount > 0 ? "🎉 You Win! +" + winAmount + "$" : "😢 You Lose! -" + totalBet + "$";
 
-            // Gửi sang ResultActivity
             Intent intent = new Intent(this, com.anhtu.turbo88.ui.ResultActivity.class);
             intent.putStringArrayListExtra("RANKING", new ArrayList<>(ranking));
             intent.putExtra("BET_RESULT", betResult);
             intent.putExtra("NEW_BALANCE", newBalance);
+
+            // NEW: truyền danh sách các con ốc đã cược
+            intent.putIntegerArrayListExtra("BET_SNAILS", new ArrayList<>(bets.keySet()));
+
             startActivity(intent);
         }
     }
