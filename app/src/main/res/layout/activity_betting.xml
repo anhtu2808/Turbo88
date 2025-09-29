@@ -7,31 +7,50 @@
     android:layout_height="match_parent"
     tools:context=".ui.BettingActivity">
 
-    <!-- ImageView background for proper centerCrop scaling on different screens -->
+    <!-- ImageView background, constrained to the parent, acting as a background for the whole screen -->
     <ImageView
         android:id="@+id/menu_bg_img"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:src="@drawable/background_1"
-        android:contentDescription="@null" />
-
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Place Your Bets"
-        android:textColor="@android:color/white"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:shadowColor="#000000"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:shadowRadius="4"
+        android:contentDescription="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- AppBarLayout is now on top of the ImageView -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:elevation="0dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            app:titleTextColor="@android:color/white"
+            app:title="Place Your Bets" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <Button
+        android:id="@+id/btn_top_up"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Top Up Balance"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
     <TextView
         android:id="@+id/tvBalance"
@@ -47,7 +66,7 @@
         android:shadowRadius="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_top_up" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -68,6 +87,7 @@
             android:columnOrderPreserved="false"
             android:padding="8dp">
 
+            <!-- Snail Cards remain the same -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -230,27 +250,27 @@
                         android:scaleType="centerCrop"
                         android:contentDescription="Snail 4" />
 
-                    <CheckBox
-                        android:id="@+id/cbSnail4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Burn"
-                        android:textColor="@android:color/white"
-                        android:buttonTint="@android:color/white"/>
+                        <CheckBox
+                            android:id="@+id/cbSnail4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Burn"
+                            android:textColor="@android:color/white"
+                            android:buttonTint="@android:color/white"/>
 
-                    <EditText
-                        android:id="@+id/etBetAmount4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Bet Amount"
-                        android:textColorHint="#CCCCCC"
-                        android:textColor="@android:color/white"
-                        android:inputType="number"
-                        android:textSize="14sp"
-                        android:backgroundTint="@android:color/white"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        <EditText
+                            android:id="@+id/etBetAmount4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Bet Amount"
+                            android:textColorHint="#CCCCCC"
+                            android:textColor="@android:color/white"
+                            android:inputType="number"
+                            android:textSize="14sp"
+                            android:backgroundTint="@android:color/white"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
         </GridLayout>
     </ScrollView>

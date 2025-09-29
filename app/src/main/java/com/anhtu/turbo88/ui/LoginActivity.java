@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 User user = userDao.login(u, p);
                 runOnUiThread(() -> {
                     if (user != null) {
-                        session.createLoginSession(user.username);
+                        session.createLoginSession(user.getUsername());
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(LoginActivity.this, MenuActivity.class));
                         finish();

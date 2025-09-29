@@ -20,7 +20,12 @@ public interface UserDao {
     @Query("SELECT * FROM users WHERE username = :u LIMIT 1")
     User findByUsername(String u);
 
+    @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
+    User findById(int id);
+
     @Update
     void updateUser(User user);
+
+
 }
 

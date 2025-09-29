@@ -65,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
                         new Thread(() -> {
                             try {
                                 User newUser = new User(u, p);
-                                newUser.balance = 1000.0; // khởi tạo balance mặc định
+                                newUser.setBalance(1000.0); // khởi tạo balance mặc định
                                 userDao.insertUser(newUser);
                                 runOnUiThread(() -> {
                                     Toast.makeText(RegisterActivity.this, "Đăng ký thành công. Vui lòng đăng nhập.", Toast.LENGTH_SHORT).show();

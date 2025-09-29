@@ -61,7 +61,7 @@ public class ResultActivity extends AppCompatActivity {
                 UserDao userDao = AppDatabase.getInstance(this).userDao();
                 User user = userDao.findByUsername(username);
                 if (user != null) {
-                    user.balance = newBalance;
+                    user.setBalance(newBalance);
                     userDao.updateUser(user);
                 }
             }).start();

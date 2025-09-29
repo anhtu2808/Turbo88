@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,7 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -36,7 +40,7 @@ public class BettingActivity extends AppCompatActivity {
     // Khai báo các biến cho view
     private TextView tvBalance;
     private TextView tvTotalBet;
-    private Button btnStartRace;
+    private Button btnStartRace, btnTopUp;
 
     private CheckBox cbSnail1, cbSnail2, cbSnail3, cbSnail4;
     private EditText etBetAmount1, etBetAmount2, etBetAmount3, etBetAmount4;
@@ -52,13 +56,15 @@ public class BettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_betting);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        // Setup Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // Gán các biến với các component trong layout
         initViews();
@@ -80,6 +86,7 @@ public class BettingActivity extends AppCompatActivity {
         tvBalance = findViewById(R.id.tvBalance);
         tvTotalBet = findViewById(R.id.tvTotalBet);
         btnStartRace = findViewById(R.id.btnStartRace);
+        btnTopUp = findViewById(R.id.btn_top_up);
 
         cbSnail1 = findViewById(R.id.cbSnail1);
         cbSnail2 = findViewById(R.id.cbSnail2);
@@ -90,7 +97,6 @@ public class BettingActivity extends AppCompatActivity {
         etBetAmount2 = findViewById(R.id.etBetAmount2);
         etBetAmount3 = findViewById(R.id.etBetAmount3);
         etBetAmount4 = findViewById(R.id.etBetAmount4);
-
     }
 
     private void loadAndSetUserBalance() {
@@ -106,7 +112,7 @@ public class BettingActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void setUserBalance() {
         if (currentUser != null) {
-            currentBalance = currentUser.balance;
+            currentBalance = currentUser.getBalance();
             tvBalance.setText("Balance: " + currentBalance + "$");
         }
     }
@@ -138,6 +144,10 @@ public class BettingActivity extends AppCompatActivity {
         cbSnail4.setOnCheckedChangeListener(checkedChangeListener);
 
         btnStartRace.setOnClickListener(v -> handleStartRace());
+        btnTopUp.setOnClickListener(v -> {
+            Intent intent = new Intent(BettingActivity.this, TopUpActivity.class);
+            startActivity(intent);
+        });
     }
 
     @SuppressLint("SetTextI18n")
@@ -199,4 +209,12 @@ public class BettingActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // Go back to the previous activity
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
