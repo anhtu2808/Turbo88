@@ -30,6 +30,11 @@ public class SessionManager {
         return prefs.getString(KEY_USERNAME, null);
     }
 
+    public void setUsername(String username) {
+        editor.putString(KEY_USERNAME, username);
+        editor.apply();
+    }
+
     public void logout() {
         editor.clear();
         editor.apply();

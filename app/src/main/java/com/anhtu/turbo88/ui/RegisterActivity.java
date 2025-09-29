@@ -15,6 +15,7 @@ import com.anhtu.turbo88.R;
 import com.anhtu.turbo88.data.AppDatabase;
 import com.anhtu.turbo88.data.dao.UserDao;
 import com.anhtu.turbo88.data.entity.User;
+import com.anhtu.turbo88.util.SoundManager;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText etUsername, etPassword, etConfirm;
@@ -22,6 +23,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private UserDao userDao;
 
+    private SoundManager soundManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,10 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegisterAction);
 
         userDao = AppDatabase.getInstance(this).userDao();
+
+        // Nhạc nền
+        soundManager = SoundManager.getInstance(this);
+        soundManager.playBgm();
 
         btnRegister.setOnClickListener(v -> {
             final String u = etUsername.getText().toString().trim();
