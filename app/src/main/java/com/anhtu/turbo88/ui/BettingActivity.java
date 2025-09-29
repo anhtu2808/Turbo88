@@ -206,6 +206,7 @@ public class BettingActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("BETS_MAP", bets); // Serializable
         intent.putExtra("BALANCE", currentBalance);
+        intent.putExtra("START_COUNTDOWN", true); // <<< Added this line
         startActivity(intent);
     }
 

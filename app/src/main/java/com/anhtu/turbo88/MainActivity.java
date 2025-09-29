@@ -9,11 +9,13 @@ import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer; // Added import
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView; // Added import
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView flame1, flame2, flame3, flame4;
 
+    private TextView tvCountdown; // Added for countdown
+    private Button btnReset, btnBack; // Added for enabling/disabling
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +55,14 @@ public class MainActivity extends AppCompatActivity {
         snail3 = findViewById(R.id.snail3);
         snail4 = findViewById(R.id.snail4);
 
-
         flame1 = findViewById(R.id.flame1);
         flame2 = findViewById(R.id.flame2);
         flame3 = findViewById(R.id.flame3);
         flame4 = findViewById(R.id.flame4);
 
+        tvCountdown = findViewById(R.id.tvCountdown); // Initialize countdown TextView
+        btnReset = findViewById(R.id.btnReset);       // Initialize Reset Button
+        btnBack = findViewById(R.id.btnBack);         // Initialize Back Button
 
         snail1.setThumb(getResources().getDrawable(R.drawable.snail_animation));
         snail2.setThumb(getResources().getDrawable(R.drawable.snail_animation1));
@@ -67,25 +74,24 @@ public class MainActivity extends AppCompatActivity {
         startSnailAnimation(snail3);
         startSnailAnimation(snail4);
 
-        findViewById(R.id.btnStart).setOnClickListener(v -> {
-            if (!isRunning) {
-                isRunning = true;
-                startRace();
+        // Listener for btnBack (now it just finishes the activity)
+        btnBack.setOnClickListener(v -> finish());
+
+        btnReset.setOnClickListener(v -> {
+            if (!isRunning) { // Only reset if not actively counting down or racing
+                progress1 = progress2 = progress3 = progress4 = 0;
+                snail1.setProgress(progress1);
+                snail2.setProgress(progress2);
+                snail3.setProgress(progress3);
+                snail4.setProgress(progress4);
+
+                snail1.getProgressDrawable().setColorFilter(null);
+                snail2.getProgressDrawable().setColorFilter(null);
+                snail3.getProgressDrawable().setColorFilter(null);
+                snail4.getProgressDrawable().setColorFilter(null);
+            } else {
+                Toast.makeText(MainActivity.this, "Cannot reset during race or countdown", Toast.LENGTH_SHORT).show();
             }
-        });
-
-        findViewById(R.id.btnReset).setOnClickListener(v -> {
-            isRunning = false;
-            progress1 = progress2 = progress3 = progress4 = 0;
-            snail1.setProgress(progress1);
-            snail2.setProgress(progress2);
-            snail3.setProgress(progress3);
-            snail4.setProgress(progress4);
-
-            snail1.getProgressDrawable().setColorFilter(null);
-            snail2.getProgressDrawable().setColorFilter(null);
-            snail3.getProgressDrawable().setColorFilter(null);
-            snail4.getProgressDrawable().setColorFilter(null);
         });
 
         bgMusic = MediaPlayer.create(this, R.raw.tokyo);
@@ -99,7 +105,10 @@ public class MainActivity extends AppCompatActivity {
                 0
         );
 
-
+        // Check if we need to start the countdown
+        if (getIntent().getBooleanExtra("START_COUNTDOWN", false)) {
+            startRaceCountdown();
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -108,6 +117,40 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void startRaceCountdown() {
+        tvCountdown.setVisibility(View.VISIBLE);
+        btnReset.setEnabled(false);
+        btnBack.setEnabled(false);
+        // Disable SeekBars interaction during countdown if desired
+        snail1.setEnabled(false);
+        snail2.setEnabled(false);
+        snail3.setEnabled(false);
+        snail4.setEnabled(false);
+
+        new CountDownTimer(3999, 1000) { // 3.999 seconds, tick every second
+            public void onTick(long millisUntilFinished) {
+                long secondsRemaining = (millisUntilFinished / 1000) + 1;
+                 if (secondsRemaining > 3) secondsRemaining = 3; // Cap at 3 for display
+                tvCountdown.setText(String.valueOf(secondsRemaining));
+            }
+
+            public void onFinish() {
+                tvCountdown.setVisibility(View.GONE);
+                btnReset.setEnabled(true);
+                btnBack.setEnabled(true);
+                // Re-enable SeekBars if they were disabled
+                snail1.setEnabled(true);
+                snail2.setEnabled(true);
+                snail3.setEnabled(true);
+                snail4.setEnabled(true);
+
+                if (!isRunning) { // Start race if not already running
+                    isRunning = true;
+                    startRace();
+                }
+            }
+        }.start();
+    }
 
 
     @Override
@@ -117,11 +160,19 @@ public class MainActivity extends AppCompatActivity {
             bgMusic.release();
             bgMusic = null;
         }
+        handler.removeCallbacksAndMessages(null); // Stop any pending race updates
     }
 
-
-
     private void startRace() {
+        // Reset progress just before starting a new race if it's a fresh start
+        // If continuing, this might not be needed, but for a clean start from countdown:
+        // progress1 = progress2 = progress3 = progress4 = 0;
+        // snail1.setProgress(progress1);
+        // snail2.setProgress(progress2);
+        // snail3.setProgress(progress3);
+        // snail4.setProgress(progress4);
+        // snail1.getProgressDrawable().setColorFilter(null); // etc for others
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -145,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                     snail4.setProgress(progress4);
 
                     checkWinner();
-                    if (isRunning)
+                    if (isRunning) // Continue race if not finished
                         handler.postDelayed(this, 150);
                 }
             }
@@ -186,12 +237,19 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressWarnings("unchecked")
     private void checkWinner() {
+        if (!isRunning) return; // Don't proceed if race was stopped/reset
+
         if (progress1 >= max || progress2 >= max || progress3 >= max || progress4 >= max) {
-            isRunning = false;
+            isRunning = false; // Stop the race loop
 
             HashMap<Integer, Integer> bets =
                     (HashMap<Integer, Integer>) getIntent().getSerializableExtra("BETS_MAP");
             double balance = getIntent().getDoubleExtra("BALANCE", 0);
+
+            if (bets == null) { // Handle case where bets might not have been passed (e.g. direct start)
+                bets = new HashMap<>();
+                 Toast.makeText(this, "No bet data found, running for fun!", Toast.LENGTH_LONG).show();
+            }
 
             ArrayList<String> ranking = getRanking();
 
@@ -207,18 +265,19 @@ public class MainActivity extends AppCompatActivity {
             }
 
             double totalBet = 0;
-            for (int bet : bets.values()) totalBet += bet;
+            for (int betAmount : bets.values()) totalBet += betAmount;
 
+            double profitOrLoss = totalWinAmount - totalBet;
             double newBalance = balance - totalBet + totalWinAmount;
 
-            totalWinAmount = totalWinAmount - totalBet;
             StringBuilder betResultBuilder = new StringBuilder();
-            if (totalWinAmount > 0) {
-                betResultBuilder.append("🎉 Bạn thắng! +").append(totalWinAmount).append("$");
-            } else if(totalWinAmount < 0){
-                betResultBuilder.append("😢 Thua cược! ").append(totalWinAmount).append("$");
+            if (profitOrLoss > 0) {
+                betResultBuilder.append("🎉 Bạn thắng! +").append(profitOrLoss).append("$");
+            } else if(profitOrLoss < 0){
+                betResultBuilder.append("😢 Thua cược! ").append(profitOrLoss).append("$");
             } else{
-                betResultBuilder.append("Bạn hoà vốn");
+                 if (!bets.isEmpty()) betResultBuilder.append("Bạn hoà vốn");
+                 else betResultBuilder.append("Cuộc đua kết thúc!");
             }
             String betResult = betResultBuilder.toString();
 
@@ -226,6 +285,8 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("RANKING", new ArrayList<>(ranking));
             intent.putExtra("BET_RESULT", betResult);
             intent.putExtra("NEW_BALANCE", newBalance);
+            intent.putExtra("HAS_BETS", !bets.isEmpty());
+
 
             // Gửi danh sách ID đã cược
             intent.putIntegerArrayListExtra("BET_SNAILS", new ArrayList<>(bets.keySet()));
@@ -244,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("BET_VALUES", betValues);
 
             startActivity(intent);
+            finish(); // Finish MainActivity after navigating to ResultActivity
         }
     }
 
@@ -256,14 +318,12 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> getRanking() {
         ArrayList<String> ranking = new ArrayList<>();
-        // Gom progress vào list tạm
         List<int[]> results = new ArrayList<>();
         results.add(new int[]{progress1, 1});
         results.add(new int[]{progress2, 2});
         results.add(new int[]{progress3, 3});
         results.add(new int[]{progress4, 4});
 
-        // Sắp xếp giảm dần theo progress
         results.sort((a, b) -> Integer.compare(b[0], a[0]));
 
         for (int[] res : results) {
@@ -306,6 +366,4 @@ public class MainActivity extends AppCompatActivity {
             ani.start();
         }
     }
-
-
 }
