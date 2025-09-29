@@ -21,7 +21,11 @@
             android:exported="false" />
 
         <activity
-            android:name=".ui.TopupActivity"
+            android:name=".ui.TopUpActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.TransactionHistoryActivity"
             android:exported="false" />
 
         <activity
