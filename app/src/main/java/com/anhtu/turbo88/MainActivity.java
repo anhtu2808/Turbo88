@@ -223,27 +223,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
-    private String getWinner() {
-        int maxProgress = Math.max(Math.max(progress1, progress2), Math.max(progress3, progress4));
-
-        List<String> candidates = new ArrayList<>();
-        if (progress1 == maxProgress) candidates.add("Snail 1");
-        if (progress2 == maxProgress) candidates.add("Snail 2");
-        if (progress3 == maxProgress) candidates.add("Snail 3");
-        if (progress4 == maxProgress) candidates.add("Snail 4");
-
-        Random random = new Random();
-        return candidates.get(random.nextInt(candidates.size()));
-    }
-
-    private void showWinnerDialog(String winner) {
-        new AlertDialog.Builder(this)
-                .setTitle("Race Finished 🏁")
-                .setMessage(winner + " is the winner!")
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
     private ArrayList<String> getRanking() {
         ArrayList<String> ranking = new ArrayList<>();
         // Gom progress vào list tạm
