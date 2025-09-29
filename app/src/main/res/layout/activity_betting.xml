@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.BettingActivity">
 
-    <!-- ImageView background, constrained to the parent, acting as a background for the whole screen -->
     <ImageView
         android:id="@+id/menu_bg_img"
         android:layout_width="0dp"
@@ -20,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- AppBarLayout is now on top of the ImageView -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -45,12 +43,18 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Top Up Balance"
+        android:text="Top Up"
         android:textColor="@android:color/white"
+        android:layout_marginEnd="16dp"
+        app:icon="@null"
+        app:iconPadding="0dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+        app:layout_constraintTop_toTopOf="@id/appBarLayout"
+        app:layout_constraintBottom_toBottomOf="@id/appBarLayout" />
 
     <TextView
         android:id="@+id/tvBalance"
@@ -66,215 +70,220 @@
         android:shadowRadius="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_top_up" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-    <ScrollView
+    <GridLayout
+        android:id="@+id/snailGrid"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:columnCount="4"
+        android:alignmentMode="alignMargins"
+        android:columnOrderPreserved="false"
+        android:padding="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintTop_toBottomOf="@id/tvBalance"
         app:layout_constraintBottom_toTopOf="@id/tvTotalBet"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <GridLayout
-            android:id="@+id/snailGrid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:alignmentMode="alignMargins"
-            android:columnOrderPreserved="false"
-            android:padding="8dp">
+        <!-- Snail Card 1 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
+            app:cardBackgroundColor="#A0444444"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
 
-            <!-- Snail Cards remain the same -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="8dp"
-                app:cardBackgroundColor="#A0444444"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                android:orientation="vertical"
+                android:padding="6dp"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/imgSnail1"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/turbo_logo"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="Snail 1" />
+
+                <CheckBox
+                    android:id="@+id/cbSnail1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Turbo"
+                    android:textColor="@android:color/white"
+                    android:buttonTint="@android:color/white"/>
+
+                <EditText
+                    android:id="@+id/etBetAmount1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp"
-                    android:gravity="center_horizontal">
+                    android:minHeight="40dp"
+                    android:hint="Bet"
+                    android:textColorHint="#CCCCCC"
+                    android:textColor="@android:color/white"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:backgroundTint="@android:color/white"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-                    <ImageView
-                        android:id="@+id/imgSnail1"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/turbo_logo"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="Snail 1" />
+        <!-- Snail Card 2 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
+            app:cardBackgroundColor="#A0444444"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
 
-                    <CheckBox
-                        android:id="@+id/cbSnail1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Turbo"
-                        android:textColor="@android:color/white"
-                        android:buttonTint="@android:color/white"/>
-
-                    <EditText
-                        android:id="@+id/etBetAmount1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Bet Amount"
-                        android:textColorHint="#CCCCCC"
-                        android:textColor="@android:color/white"
-                        android:inputType="number"
-                        android:textSize="14sp"
-                        android:backgroundTint="@android:color/white"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="8dp"
-                app:cardBackgroundColor="#A0444444"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                android:orientation="vertical"
+                android:padding="6dp"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/imgSnail2"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/nizza"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="Snail 2" />
+
+                <CheckBox
+                    android:id="@+id/cbSnail2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Nizza"
+                    android:textColor="@android:color/white"
+                    android:buttonTint="@android:color/white"/>
+
+                <EditText
+                    android:id="@+id/etBetAmount2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp"
-                    android:gravity="center_horizontal">
+                    android:minHeight="40dp"
+                    android:hint="Bet"
+                    android:textColorHint="#CCCCCC"
+                    android:textColor="@android:color/white"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:backgroundTint="@android:color/white"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-                    <ImageView
-                        android:id="@+id/imgSnail2"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/nizza"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="Snail 2" />
+        <!-- Snail Card 3 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
+            app:cardBackgroundColor="#A0444444"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
 
-                    <CheckBox
-                        android:id="@+id/cbSnail2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Nizza"
-                        android:textColor="@android:color/white"
-                        android:buttonTint="@android:color/white"/>
-
-                    <EditText
-                        android:id="@+id/etBetAmount2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Bet Amount"
-                        android:textColorHint="#CCCCCC"
-                        android:textColor="@android:color/white"
-                        android:inputType="number"
-                        android:textSize="14sp"
-                        android:backgroundTint="@android:color/white"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="8dp"
-                app:cardBackgroundColor="#A0444444"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                android:orientation="vertical"
+                android:padding="6dp"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/imgSnail3"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/chuppy"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="Snail 3" />
+
+                <CheckBox
+                    android:id="@+id/cbSnail3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Chuppy"
+                    android:textColor="@android:color/white"
+                    android:buttonTint="@android:color/white"/>
+
+                <EditText
+                    android:id="@+id/etBetAmount3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp"
-                    android:gravity="center_horizontal">
+                    android:minHeight="40dp"
+                    android:hint="Bet"
+                    android:textColorHint="#CCCCCC"
+                    android:textColor="@android:color/white"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:backgroundTint="@android:color/white"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-                    <ImageView
-                        android:id="@+id/imgSnail3"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/chuppy"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="Snail 3" />
+        <!-- Snail Card 4 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
+            app:cardBackgroundColor="#A0444444"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
 
-                    <CheckBox
-                        android:id="@+id/cbSnail3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Chuppy"
-                        android:textColor="@android:color/white"
-                        android:buttonTint="@android:color/white"/>
-
-                    <EditText
-                        android:id="@+id/etBetAmount3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Bet Amount"
-                        android:textColorHint="#CCCCCC"
-                        android:textColor="@android:color/white"
-                        android:inputType="number"
-                        android:textSize="14sp"
-                        android:backgroundTint="@android:color/white"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="8dp"
-                app:cardBackgroundColor="#A0444444"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                android:orientation="vertical"
+                android:padding="6dp"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/imgSnail4"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/lady"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="Snail 4" />
+
+                <CheckBox
+                    android:id="@+id/cbSnail4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Burn"
+                    android:textColor="@android:color/white"
+                    android:buttonTint="@android:color/white"/>
+
+                <EditText
+                    android:id="@+id/etBetAmount4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp"
-                    android:gravity="center_horizontal">
+                    android:minHeight="40dp"
+                    android:hint="Bet"
+                    android:textColorHint="#CCCCCC"
+                    android:textColor="@android:color/white"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:backgroundTint="@android:color/white"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-                    <ImageView
-                        android:id="@+id/imgSnail4"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/lady"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="Snail 4" />
-
-                        <CheckBox
-                            android:id="@+id/cbSnail4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Burn"
-                            android:textColor="@android:color/white"
-                            android:buttonTint="@android:color/white"/>
-
-                        <EditText
-                            android:id="@+id/etBetAmount4"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Bet Amount"
-                            android:textColorHint="#CCCCCC"
-                            android:textColor="@android:color/white"
-                            android:inputType="number"
-                            android:textSize="14sp"
-                            android:backgroundTint="@android:color/white"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-        </GridLayout>
-    </ScrollView>
-
+    </GridLayout>
 
     <TextView
         android:id="@+id/tvTotalBet"
@@ -282,9 +291,9 @@
         android:layout_height="wrap_content"
         android:text="Total Bet: 0$"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:shadowColor="#000000"
         android:shadowDx="1"
         android:shadowDy="1"
@@ -297,12 +306,15 @@
         android:id="@+id/btnStartRace"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:padding="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="12dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:text="Start Race"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
