@@ -195,33 +195,65 @@ public class MainActivity extends AppCompatActivity {
 
             ArrayList<String> ranking = getRanking();
 
-            String winnerLine = ranking.get(0);
-            int winnerId = Integer.parseInt(winnerLine.replaceAll("\\D+", ""));
+            int firstId = extractSnailId(ranking.get(0));
+            int secondId = ranking.size() >= 2 ? extractSnailId(ranking.get(1)) : -1;
 
-            double winAmount = 0;
-            if (bets.containsKey(winnerId)) {
-                winAmount = bets.get(winnerId) * 2.0;
+            double totalWinAmount = 0;
+            if (bets.containsKey(firstId)) {
+                totalWinAmount += bets.get(firstId) * 2.0;
+            }
+            if (secondId != -1 && bets.containsKey(secondId)) {
+                totalWinAmount += bets.get(secondId) * 1.5;
             }
 
             double totalBet = 0;
-            for (int bet : bets.values()) {
-                totalBet += bet;
-            }
+            for (int bet : bets.values()) totalBet += bet;
 
-            double newBalance = balance - totalBet + winAmount;
-            String betResult = winAmount > 0 ? "🎉 You Win! +" + winAmount + "$" : "😢 You Lose! -" + totalBet + "$";
+            double newBalance = balance - totalBet + totalWinAmount;
+
+            totalWinAmount = totalWinAmount - totalBet;
+            StringBuilder betResultBuilder = new StringBuilder();
+            if (totalWinAmount > 0) {
+                betResultBuilder.append("🎉 Bạn thắng! +").append(totalWinAmount).append("$");
+            } else if(totalWinAmount < 0){
+                betResultBuilder.append("😢 Thua cược! ").append(totalWinAmount).append("$");
+            } else{
+                betResultBuilder.append("Bạn hoà vốn");
+            }
+            String betResult = betResultBuilder.toString();
 
             Intent intent = new Intent(this, com.anhtu.turbo88.ui.ResultActivity.class);
             intent.putStringArrayListExtra("RANKING", new ArrayList<>(ranking));
             intent.putExtra("BET_RESULT", betResult);
             intent.putExtra("NEW_BALANCE", newBalance);
 
-            // NEW: truyền danh sách các con ốc đã cược
+            // Gửi danh sách ID đã cược
             intent.putIntegerArrayListExtra("BET_SNAILS", new ArrayList<>(bets.keySet()));
+
+            // Gửi riêng mảng ID và giá trị để tái dựng map (an toàn & nhẹ)
+            int size = bets.size();
+            int[] betIds = new int[size];
+            int[] betValues = new int[size];
+            int idx = 0;
+            for (Integer k : bets.keySet()) {
+                betIds[idx] = k;
+                betValues[idx] = bets.get(k);
+                idx++;
+            }
+            intent.putExtra("BET_IDS", betIds);
+            intent.putExtra("BET_VALUES", betValues);
 
             startActivity(intent);
         }
     }
+
+    private int extractSnailId(String line) {
+        if (line == null) return -1;
+        String digits = line.replaceAll("\\D+", "");
+        if (digits.isEmpty()) return -1;
+        try { return Integer.parseInt(digits); } catch (NumberFormatException e) { return -1; }
+    }
+
     private ArrayList<String> getRanking() {
         ArrayList<String> ranking = new ArrayList<>();
         // Gom progress vào list tạm
