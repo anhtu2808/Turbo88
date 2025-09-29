@@ -23,13 +23,13 @@ public class ResultActivity extends AppCompatActivity {
     private TextView tvBetResult, tvBalance;
     private Button btnClose;
 
-    private ImageView imgFirst, imgSecond, imgThird;
-    private TextView tvFirstName, tvSecondName, tvThirdName;
+    private ImageView imgFirst, imgSecond, imgThird, imgFourth;
+    private TextView tvFirstName, tvSecondName, tvThirdName, tvFourthName;
 
     private SessionManager session;
     private UserDao userDao;
 
-    private List<Integer> betSnails; // NEW: danh sách ID ốc đã cược
+    private List<Integer> betSnails; // danh sách ID ốc đã cược
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +43,12 @@ public class ResultActivity extends AppCompatActivity {
         imgFirst = findViewById(R.id.imgFirst);
         imgSecond = findViewById(R.id.imgSecond);
         imgThird = findViewById(R.id.imgThird);
+        imgFourth = findViewById(R.id.imgFourth);
+
         tvFirstName = findViewById(R.id.tvFirstName);
         tvSecondName = findViewById(R.id.tvSecondName);
         tvThirdName = findViewById(R.id.tvThirdName);
+        tvFourthName = findViewById(R.id.tvFourthName);
 
         session = new SessionManager(this);
         userDao = AppDatabase.getInstance(this).userDao();
@@ -54,7 +57,6 @@ public class ResultActivity extends AppCompatActivity {
         String betResult = getIntent().getStringExtra("BET_RESULT");
         double newBalance = getIntent().getDoubleExtra("NEW_BALANCE", 0);
 
-        // NEW: nhận danh sách các ốc đã cược
         betSnails = getIntent().getIntegerArrayListExtra("BET_SNAILS");
 
         setupPodium(ranking, betSnails);
@@ -62,7 +64,6 @@ public class ResultActivity extends AppCompatActivity {
         tvBetResult.setText(betResult != null ? betResult : "");
         tvBalance.setText(String.format(Locale.US, "New Balance: %.2f$", newBalance));
 
-        // Cập nhật DB
         String username = session.getUsername();
         if (username != null) {
             new Thread(() -> {
@@ -83,54 +84,79 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void setupPodium(List<String> ranking, List<Integer> betSnails) {
+        // Reset mờ nếu không có dữ liệu
         if (ranking == null || ranking.isEmpty()) {
-            imgFirst.setAlpha(0.3f);
-            imgSecond.setAlpha(0.3f);
-            imgThird.setAlpha(0.3f);
-            tvFirstName.setText("-");
-            tvSecondName.setText("-");
-            tvThirdName.setText("-");
+            dimAll();
             return;
         }
 
+        // First
         if (ranking.size() >= 1) {
             String first = ranking.get(0);
             tvFirstName.setText(getDisplayName(first));
             imgFirst.setImageResource(getSnailDrawable(first));
             highlightIfBet(first, betSnails, imgFirst, tvFirstName);
         } else {
-            tvFirstName.setText("-");
-            imgFirst.setAlpha(0.3f);
+            setSlotEmpty(imgFirst, tvFirstName);
         }
 
+        // Second
         if (ranking.size() >= 2) {
             String second = ranking.get(1);
             tvSecondName.setText(getDisplayName(second));
             imgSecond.setImageResource(getSnailDrawable(second));
             highlightIfBet(second, betSnails, imgSecond, tvSecondName);
         } else {
-            tvSecondName.setText("-");
-            imgSecond.setAlpha(0.3f);
+            setSlotEmpty(imgSecond, tvSecondName);
         }
 
+        // Third
         if (ranking.size() >= 3) {
             String third = ranking.get(2);
             tvThirdName.setText(getDisplayName(third));
             imgThird.setImageResource(getSnailDrawable(third));
             highlightIfBet(third, betSnails, imgThird, tvThirdName);
         } else {
-            tvThirdName.setText("-");
-            imgThird.setAlpha(0.3f);
+            setSlotEmpty(imgThird, tvThirdName);
         }
+
+        // Fourth
+        if (ranking.size() >= 4) {
+            String fourth = ranking.get(3);
+            tvFourthName.setText(getDisplayName(fourth));
+            imgFourth.setImageResource(getSnailDrawable(fourth));
+            highlightIfBet(fourth, betSnails, imgFourth, tvFourthName);
+        } else {
+            setSlotEmpty(imgFourth, tvFourthName);
+        }
+    }
+
+    private void dimAll() {
+        setDim(imgFirst, tvFirstName);
+        setDim(imgSecond, tvSecondName);
+        setDim(imgThird, tvThirdName);
+        setDim(imgFourth, tvFourthName);
+    }
+
+    private void setDim(ImageView img, TextView tv) {
+        img.setAlpha(0.3f);
+        tv.setText("-");
+    }
+
+    private void setSlotEmpty(ImageView img, TextView tv) {
+        img.setAlpha(0.3f);
+        tv.setText("-");
     }
 
     private void highlightIfBet(String snailName, List<Integer> betSnails, ImageView img, TextView tvName) {
         if (isBetSnail(snailName, betSnails)) {
             img.setBackgroundResource(R.drawable.bg_highlight);
-            tvName.setTextColor(Color.parseColor("#FFD700")); // vàng
+            tvName.setTextColor(Color.parseColor("#FFD700"));
+            img.setAlpha(1f);
         } else {
             img.setBackground(null);
-            tvName.setTextColor(Color.WHITE); // trả về màu cũ
+            tvName.setTextColor(Color.WHITE);
+            img.setAlpha(1f);
         }
     }
 
@@ -138,7 +164,12 @@ public class ResultActivity extends AppCompatActivity {
         if (snailName == null || betSnails == null) return false;
         String digits = snailName.replaceAll("\\D+", "");
         if (digits.isEmpty()) return false;
-        int id = Integer.parseInt(digits);
+        int id;
+        try {
+            id = Integer.parseInt(digits);
+        } catch (NumberFormatException e) {
+            return false;
+        }
         return betSnails.contains(id);
     }
 
@@ -152,7 +183,7 @@ public class ResultActivity extends AppCompatActivity {
             case "snail 3":
                 return R.drawable.chuppy;
             case "snail 4":
-                return R.drawable.lady;
+                return R.drawable.lady; // hoặc Burn nếu bạn đổi tên resource
             default:
                 return R.drawable.ic_snail_placeholder;
         }
