@@ -3,19 +3,16 @@ package com.anhtu.turbo88;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.app.AlertDialog;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.CountDownTimer; // Added import
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.TextView; // Added import
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +20,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.anhtu.turbo88.data.AppDatabase;
+import com.anhtu.turbo88.data.dao.TransactionDao;
+import com.anhtu.turbo88.data.dao.UserDao;
+import com.anhtu.turbo88.data.entity.Transaction;
+import com.anhtu.turbo88.data.entity.User;
+import com.anhtu.turbo88.util.SessionManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,8 +44,14 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView flame1, flame2, flame3, flame4;
 
-    private TextView tvCountdown; // Added for countdown
-    private Button btnReset, btnBack; // Added for enabling/disabling
+    private TextView tvCountdown;
+
+    private TransactionDao transactionDao;
+    private UserDao userDao;
+    private SessionManager sessionManager;
+    private User currentUser;
+
+    private Button btnReset, btnBack;
 
 
     @Override
@@ -49,6 +59,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        // Initialize Database, DAOs, and SessionManager
+        AppDatabase db = AppDatabase.getInstance(this);
+        userDao = db.userDao();
+        transactionDao = db.transactionDao();
+        sessionManager = new SessionManager(this);
+
+        // Get current user by username from session
+        String username = sessionManager.getUsername();
+        if (username == null) {
+            Toast.makeText(this, "Error: User not logged in.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+        currentUser = userDao.findByUsername(username);
+
+        if (currentUser == null) {
+            Toast.makeText(this, "Error: Could not find user data.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         snail1 = findViewById(R.id.snail1);
         snail2 = findViewById(R.id.snail2);
@@ -60,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
         flame3 = findViewById(R.id.flame3);
         flame4 = findViewById(R.id.flame4);
 
-        tvCountdown = findViewById(R.id.tvCountdown); // Initialize countdown TextView
-        btnReset = findViewById(R.id.btnReset);       // Initialize Reset Button
-        btnBack = findViewById(R.id.btnBack);         // Initialize Back Button
+        tvCountdown = findViewById(R.id.tvCountdown);
+        btnReset = findViewById(R.id.btnReset);
+        btnBack = findViewById(R.id.btnBack);
 
         snail1.setThumb(getResources().getDrawable(R.drawable.snail_animation));
         snail2.setThumb(getResources().getDrawable(R.drawable.snail_animation1));
@@ -74,11 +105,10 @@ public class MainActivity extends AppCompatActivity {
         startSnailAnimation(snail3);
         startSnailAnimation(snail4);
 
-        // Listener for btnBack (now it just finishes the activity)
         btnBack.setOnClickListener(v -> finish());
 
         btnReset.setOnClickListener(v -> {
-            if (!isRunning) { // Only reset if not actively counting down or racing
+            if (!isRunning) {
                 progress1 = progress2 = progress3 = progress4 = 0;
                 snail1.setProgress(progress1);
                 snail2.setProgress(progress2);
@@ -105,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                 0
         );
 
-        // Check if we need to start the countdown
         if (getIntent().getBooleanExtra("START_COUNTDOWN", false)) {
             startRaceCountdown();
         }
@@ -121,16 +150,15 @@ public class MainActivity extends AppCompatActivity {
         tvCountdown.setVisibility(View.VISIBLE);
         btnReset.setEnabled(false);
         btnBack.setEnabled(false);
-        // Disable SeekBars interaction during countdown if desired
         snail1.setEnabled(false);
         snail2.setEnabled(false);
         snail3.setEnabled(false);
         snail4.setEnabled(false);
 
-        new CountDownTimer(3999, 1000) { // 3.999 seconds, tick every second
+        new CountDownTimer(3999, 1000) {
             public void onTick(long millisUntilFinished) {
                 long secondsRemaining = (millisUntilFinished / 1000) + 1;
-                 if (secondsRemaining > 3) secondsRemaining = 3; // Cap at 3 for display
+                 if (secondsRemaining > 3) secondsRemaining = 3;
                 tvCountdown.setText(String.valueOf(secondsRemaining));
             }
 
@@ -138,13 +166,12 @@ public class MainActivity extends AppCompatActivity {
                 tvCountdown.setVisibility(View.GONE);
                 btnReset.setEnabled(true);
                 btnBack.setEnabled(true);
-                // Re-enable SeekBars if they were disabled
                 snail1.setEnabled(true);
                 snail2.setEnabled(true);
                 snail3.setEnabled(true);
                 snail4.setEnabled(true);
 
-                if (!isRunning) { // Start race if not already running
+                if (!isRunning) {
                     isRunning = true;
                     startRace();
                 }
@@ -160,19 +187,10 @@ public class MainActivity extends AppCompatActivity {
             bgMusic.release();
             bgMusic = null;
         }
-        handler.removeCallbacksAndMessages(null); // Stop any pending race updates
+        handler.removeCallbacksAndMessages(null);
     }
 
     private void startRace() {
-        // Reset progress just before starting a new race if it's a fresh start
-        // If continuing, this might not be needed, but for a clean start from countdown:
-        // progress1 = progress2 = progress3 = progress4 = 0;
-        // snail1.setProgress(progress1);
-        // snail2.setProgress(progress2);
-        // snail3.setProgress(progress3);
-        // snail4.setProgress(progress4);
-        // snail1.getProgressDrawable().setColorFilter(null); // etc for others
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -196,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                     snail4.setProgress(progress4);
 
                     checkWinner();
-                    if (isRunning) // Continue race if not finished
+                    if (isRunning)
                         handler.postDelayed(this, 150);
                 }
             }
@@ -237,16 +255,16 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressWarnings("unchecked")
     private void checkWinner() {
-        if (!isRunning) return; // Don't proceed if race was stopped/reset
+        if (!isRunning) return;
 
         if (progress1 >= max || progress2 >= max || progress3 >= max || progress4 >= max) {
-            isRunning = false; // Stop the race loop
+            isRunning = false;
 
             HashMap<Integer, Integer> bets =
                     (HashMap<Integer, Integer>) getIntent().getSerializableExtra("BETS_MAP");
             double balance = getIntent().getDoubleExtra("BALANCE", 0);
 
-            if (bets == null) { // Handle case where bets might not have been passed (e.g. direct start)
+            if (bets == null) {
                 bets = new HashMap<>();
                  Toast.makeText(this, "No bet data found, running for fun!", Toast.LENGTH_LONG).show();
             }
@@ -270,6 +288,12 @@ public class MainActivity extends AppCompatActivity {
             double profitOrLoss = totalWinAmount - totalBet;
             double newBalance = balance - totalBet + totalWinAmount;
 
+            if (currentUser != null && !bets.isEmpty()) {
+                String transactionType = profitOrLoss >= 0 ? "WIN" : "LOSS";
+                Transaction transaction = new Transaction(currentUser.getId(), transactionType, Math.abs(profitOrLoss), System.currentTimeMillis());
+                transactionDao.insertTransaction(transaction);
+            }
+
             StringBuilder betResultBuilder = new StringBuilder();
             if (profitOrLoss > 0) {
                 betResultBuilder.append("🎉 Bạn thắng! +").append(profitOrLoss).append("$");
@@ -287,11 +311,8 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("NEW_BALANCE", newBalance);
             intent.putExtra("HAS_BETS", !bets.isEmpty());
 
-
-            // Gửi danh sách ID đã cược
             intent.putIntegerArrayListExtra("BET_SNAILS", new ArrayList<>(bets.keySet()));
 
-            // Gửi riêng mảng ID và giá trị để tái dựng map (an toàn & nhẹ)
             int size = bets.size();
             int[] betIds = new int[size];
             int[] betValues = new int[size];
@@ -305,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("BET_VALUES", betValues);
 
             startActivity(intent);
-            finish(); // Finish MainActivity after navigating to ResultActivity
+            finish();
         }
     }
 

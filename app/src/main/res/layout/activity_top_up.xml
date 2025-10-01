@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
         android:src="@drawable/menu_bg" />
 
     <com.google.android.material.appbar.AppBarLayout
@@ -23,6 +23,8 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            app:titleTextColor="@android:color/white"
+            app:navigationIconTint="@android:color/white"
             android:layout_height="?attr/actionBarSize"
             app:title="Top Up / Withdraw" />
 

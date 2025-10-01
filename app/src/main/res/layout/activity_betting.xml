@@ -11,7 +11,7 @@
         android:id="@+id/menu_bg_img"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
         android:src="@drawable/background_1"
         android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,6 +34,7 @@
             android:background="@android:color/transparent"
             android:elevation="0dp"
             app:titleTextColor="@android:color/white"
+            app:navigationIconTint="@android:color/white"
             app:title="Place Your Bets" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -43,16 +44,14 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Top Up"
-        android:textColor="@android:color/white"
         android:layout_marginEnd="16dp"
-        app:icon="@null"
-        app:iconPadding="0dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:contentDescription="Top Up"
         android:minWidth="0dp"
         android:minHeight="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:icon="@drawable/wallet_icon"
+        app:iconPadding="0dp"
+        app:iconTint="#FFEB3B"
+        app:strokeColor="#FF5722"   app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/appBarLayout"
         app:layout_constraintBottom_toBottomOf="@id/appBarLayout" />
 
