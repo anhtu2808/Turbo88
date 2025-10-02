@@ -1,76 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@drawable/background">
 
-    <!-- Panel is direct child of ScrollView to avoid unnecessary nested LinearLayouts -->
-    <LinearLayout
-        android:orientation="vertical"
+    <!-- Root ConstraintLayout inside ScrollView for responsive positioning -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/panel_bg"
-        android:padding="20dp"
-        android:layout_margin="16dp"
-        android:gravity="center">
+        android:paddingTop="36dp"
+        android:paddingBottom="36dp">
 
+        <!-- Game title -->
         <TextView
-            android:text="@string/login"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvGameTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="28sp"
+            android:text="@string/turbo_title"
+            android:textSize="32sp"
             android:textStyle="bold"
             android:textColor="#FFDA6A"
-            android:layout_marginBottom="16dp" />
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <EditText
-            android:id="@+id/etUsername"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvLoginSub"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/username"
-            android:inputType="text"
-            android:autofillHints="username"
-            android:background="@drawable/input_bg"
-            android:textColor="#05396B"
-            android:textColorHint="#7FAECF"
-            android:padding="10dp" />
+            android:text="@string/login_sub"
+            android:textSize="14sp"
+            android:textColor="#E6F0FA"
+            android:gravity="center"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintTop_toBottomOf="@id/tvGameTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
+        <!-- Panel: uses your existing panel_bg drawable for consistent style -->
+        <LinearLayout
+            android:id="@+id/panel"
+            android:orientation="vertical"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:autofillHints="password"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/input_bg"
-            android:textColor="#05396B"
-            android:textColorHint="#7FAECF"
-            android:padding="10dp" />
+            android:background="@drawable/panel_bg"
+            android:padding="18dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toBottomOf="@id/tvLoginSub"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:elevation="6dp">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
+            <!-- Logo instead of decorative separator -->
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/turbo_logo"
+                android:contentDescription="@string/turbo_logo_desc"
+                android:layout_gravity="center"
+                android:layout_marginBottom="12dp"
+                android:scaleType="centerInside" />
+
+            <EditText
+                android:id="@+id/etUsername"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="@string/hint_username"
+                android:inputType="text"
+                android:autofillHints="username"
+                android:background="@drawable/input_bg"
+                android:drawablePadding="8dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingStart="12dp"
+                android:textColor="#05396B"
+                android:textColorHint="#7FAECF"
+                android:imeOptions="actionNext"
+                android:layout_marginTop="6dp" />
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword"
+                android:autofillHints="password"
+                android:background="@drawable/input_bg"
+                android:drawablePadding="8dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingStart="12dp"
+                android:textColor="#05396B"
+                android:textColorHint="#7FAECF"
+                android:imeOptions="actionDone"
+                android:layout_marginTop="12dp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/action_login"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/btn_primary"
+                android:backgroundTint="@null"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnToRegister"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/action_create_account"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/btn_secondary"
+                android:backgroundTint="@null"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Footer note -->
+        <TextView
+            android:id="@+id/tvFooter"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/login"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/btn_primary"
-            android:backgroundTint="@null"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:text="@string/login_footer"
+            android:textSize="12sp"
+            android:textColor="#BFD9F2"
+            android:gravity="center"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintTop_toBottomOf="@id/panel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnToRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/register"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/btn_secondary"
-            android:backgroundTint="@null"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
