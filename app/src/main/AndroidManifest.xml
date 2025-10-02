@@ -65,6 +65,9 @@
         <activity
             android:name=".ui.TermsOfServiceActivity"
             android:exported="false" />
+        <activity
+            android:name=".UserManualActivity"
+            android:exported="false" />
 
     </application>
 
