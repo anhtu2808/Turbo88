@@ -296,12 +296,12 @@ public class MainActivity extends AppCompatActivity {
 
             StringBuilder betResultBuilder = new StringBuilder();
             if (profitOrLoss > 0) {
-                betResultBuilder.append("🎉 Bạn thắng! +").append(profitOrLoss).append("$");
+                betResultBuilder.append("🎉 You win! +").append(profitOrLoss).append("$");
             } else if(profitOrLoss < 0){
-                betResultBuilder.append("😢 Thua cược! ").append(profitOrLoss).append("$");
+                betResultBuilder.append("😢 You lose! ").append(profitOrLoss).append("$");
             } else{
-                 if (!bets.isEmpty()) betResultBuilder.append("Bạn hoà vốn");
-                 else betResultBuilder.append("Cuộc đua kết thúc!");
+                 if (!bets.isEmpty()) betResultBuilder.append("No change");
+                 else betResultBuilder.append("Race end!");
             }
             String betResult = betResultBuilder.toString();
 
