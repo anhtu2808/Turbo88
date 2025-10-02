@@ -107,25 +107,25 @@
     </FrameLayout>
 
     <!-- Nút điều khiển -->
-    <LinearLayout
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+<!--    <LinearLayout-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
 
-        <Button
-            android:id="@+id/btnBack"
-            android:text="Back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+<!--        <Button-->
+<!--            android:id="@+id/btnBack"-->
+<!--            android:text="Back"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"/>-->
 
-        <Button
-            android:id="@+id/btnReset"
-            android:text="Reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"/>
-    </LinearLayout>
+<!--        <Button-->
+<!--            android:id="@+id/btnReset"-->
+<!--            android:text="Reset"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="20dp"/>-->
+<!--    </LinearLayout>-->
 
     <!-- Countdown TextView -->
     <TextView xmlns:tools="http://schemas.android.com/tools"

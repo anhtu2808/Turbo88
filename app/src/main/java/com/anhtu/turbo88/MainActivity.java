@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private SessionManager sessionManager;
     private User currentUser;
 
-    private Button btnReset, btnBack;
+//    private Button btnReset, btnBack;
 
 
     @Override
@@ -92,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
         flame4 = findViewById(R.id.flame4);
 
         tvCountdown = findViewById(R.id.tvCountdown);
-        btnReset = findViewById(R.id.btnReset);
-        btnBack = findViewById(R.id.btnBack);
+//        btnReset = findViewById(R.id.btnReset);
+//        btnBack = findViewById(R.id.btnBack);
 
         snail1.setThumb(getResources().getDrawable(R.drawable.snail_animation));
         snail2.setThumb(getResources().getDrawable(R.drawable.snail_animation1));
@@ -105,24 +105,24 @@ public class MainActivity extends AppCompatActivity {
         startSnailAnimation(snail3);
         startSnailAnimation(snail4);
 
-        btnBack.setOnClickListener(v -> finish());
-
-        btnReset.setOnClickListener(v -> {
-            if (!isRunning) {
-                progress1 = progress2 = progress3 = progress4 = 0;
-                snail1.setProgress(progress1);
-                snail2.setProgress(progress2);
-                snail3.setProgress(progress3);
-                snail4.setProgress(progress4);
-
-                snail1.getProgressDrawable().setColorFilter(null);
-                snail2.getProgressDrawable().setColorFilter(null);
-                snail3.getProgressDrawable().setColorFilter(null);
-                snail4.getProgressDrawable().setColorFilter(null);
-            } else {
-                Toast.makeText(MainActivity.this, "Cannot reset during race or countdown", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        btnBack.setOnClickListener(v -> finish());
+//
+//        btnReset.setOnClickListener(v -> {
+//            if (!isRunning) {
+//                progress1 = progress2 = progress3 = progress4 = 0;
+//                snail1.setProgress(progress1);
+//                snail2.setProgress(progress2);
+//                snail3.setProgress(progress3);
+//                snail4.setProgress(progress4);
+//
+//                snail1.getProgressDrawable().setColorFilter(null);
+//                snail2.getProgressDrawable().setColorFilter(null);
+//                snail3.getProgressDrawable().setColorFilter(null);
+//                snail4.getProgressDrawable().setColorFilter(null);
+//            } else {
+//                Toast.makeText(MainActivity.this, "Cannot reset during race or countdown", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         bgMusic = MediaPlayer.create(this, R.raw.tokyo);
         bgMusic.setLooping(true);
@@ -148,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void startRaceCountdown() {
         tvCountdown.setVisibility(View.VISIBLE);
-        btnReset.setEnabled(false);
-        btnBack.setEnabled(false);
+//        btnReset.setEnabled(false);
+//        btnBack.setEnabled(false);
         snail1.setEnabled(false);
         snail2.setEnabled(false);
         snail3.setEnabled(false);
@@ -164,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
 
             public void onFinish() {
                 tvCountdown.setVisibility(View.GONE);
-                btnReset.setEnabled(true);
-                btnBack.setEnabled(true);
+//                btnReset.setEnabled(true);
+//                btnBack.setEnabled(true);
                 snail1.setEnabled(true);
                 snail2.setEnabled(true);
                 snail3.setEnabled(true);
