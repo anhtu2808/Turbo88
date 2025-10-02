@@ -3,33 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@drawable/background">
+    android:fillViewport="true">
 
     <!-- Root ConstraintLayout inside ScrollView for responsive positioning -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="36dp"
         android:paddingBottom="36dp">
-
-        <!-- Game title -->
-        <TextView
-            android:id="@+id/tvGameTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/turbo_title"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="#FFDA6A"
-            android:gravity="center"
-            android:letterSpacing="0.05"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@drawable/menu_bg" />
         <TextView
             android:id="@+id/tvLoginSub"
             android:layout_width="0dp"
@@ -38,12 +23,13 @@
             android:textSize="14sp"
             android:textColor="#E6F0FA"
             android:gravity="center"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="0dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            app:layout_constraintTop_toBottomOf="@id/tvGameTitle"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
 
         <!-- Panel: uses your existing panel_bg drawable for consistent style -->
         <LinearLayout
@@ -84,7 +70,7 @@
                 android:paddingRight="12dp"
                 android:paddingStart="12dp"
                 android:textColor="#05396B"
-                android:textColorHint="#7FAECF"
+                android:textColorHint="#000000"
                 android:imeOptions="actionNext"
                 android:layout_marginTop="6dp" />
 
@@ -101,7 +87,7 @@
                 android:paddingRight="12dp"
                 android:paddingStart="12dp"
                 android:textColor="#05396B"
-                android:textColorHint="#7FAECF"
+                android:textColorHint="#000000"
                 android:imeOptions="actionDone"
                 android:layout_marginTop="12dp" />
 
@@ -113,7 +99,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/btn_primary"
                 android:backgroundTint="@null"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -124,7 +110,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/btn_secondary"
                 android:backgroundTint="@null"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textStyle="bold" />
 
         </LinearLayout>

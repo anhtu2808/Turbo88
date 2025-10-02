@@ -9,8 +9,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="36dp"
         android:paddingBottom="36dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@drawable/menu_bg" />
 
         <TextView
             android:id="@+id/tvRegTitle"
@@ -79,7 +83,7 @@
                 android:paddingRight="12dp"
                 android:paddingStart="12dp"
                 android:textColor="#05396B"
-                android:textColorHint="#7FAECF"
+                android:textColorHint="#000000"
                 android:imeOptions="actionNext"
                 android:layout_marginTop="6dp" />
 
@@ -96,7 +100,7 @@
                 android:paddingRight="12dp"
                 android:paddingStart="12dp"
                 android:textColor="#05396B"
-                android:textColorHint="#7FAECF"
+                android:textColorHint="#000000"
                 android:imeOptions="actionNext"
                 android:layout_marginTop="12dp" />
 
@@ -113,7 +117,7 @@
                 android:paddingRight="12dp"
                 android:paddingStart="12dp"
                 android:textColor="#05396B"
-                android:textColorHint="#7FAECF"
+                android:textColorHint="#000000"
                 android:imeOptions="actionDone"
                 android:layout_marginTop="12dp" />
 
@@ -125,7 +129,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/btn_primary"
                 android:backgroundTint="@null"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textStyle="bold" />
 
         </LinearLayout>
