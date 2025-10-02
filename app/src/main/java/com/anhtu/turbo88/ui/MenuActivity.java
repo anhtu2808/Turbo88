@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.anhtu.turbo88.R;
+import com.anhtu.turbo88.UserManualActivity;
 import com.anhtu.turbo88.data.AppDatabase;
 import com.anhtu.turbo88.data.dao.UserDao;
 import com.anhtu.turbo88.util.SessionManager;
@@ -15,7 +16,7 @@ import com.anhtu.turbo88.util.SoundManager;
 
 public class MenuActivity extends AppCompatActivity {
     private TextView tvWelcome;
-    private Button btnPlay, btnSettings, btnLogout, btnExit;
+    private Button btnPlay, btnSettings, btnUserManual, btnLogout, btnExit;
 
     private SessionManager session;
     private UserDao userDao;
@@ -29,6 +30,7 @@ public class MenuActivity extends AppCompatActivity {
         tvWelcome = findViewById(R.id.tvWelcome);
         btnPlay = findViewById(R.id.btnPlay);
         btnSettings = findViewById(R.id.btnSettings);
+        btnUserManual = findViewById(R.id.btnUserManual);
         btnLogout = findViewById(R.id.btnLogout);
         btnExit = findViewById(R.id.btnExit);
 
@@ -55,6 +57,10 @@ public class MenuActivity extends AppCompatActivity {
 
         btnSettings.setOnClickListener(v -> {
             startActivity(new Intent(MenuActivity.this, SettingsActivity.class));
+        });
+
+        btnUserManual.setOnClickListener(v -> {
+            startActivity(new Intent(MenuActivity.this, UserManualActivity.class));
         });
 
         btnLogout.setOnClickListener(v -> {

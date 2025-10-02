@@ -74,6 +74,17 @@
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnUserManual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rule"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/btn_secondary"
+                android:backgroundTint="@null"
+                android:textColor="#05396B"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnLogout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
